@@ -1,5 +1,5 @@
 import '@popperjs/core';
 import 'regenerator-runtime/runtime.js';
-import '../scss/index.scss';
+import '../scss/main.scss';
 
 console.log('ehu!');
