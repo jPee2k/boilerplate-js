@@ -1,28 +1,32 @@
+const fs = require('fs');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 // const CopyPlugin = require('copy-webpack-plugin');
 
-const pages = ['index.html'];
-const multipleHtmlPlugins = pages
-  .map((templateName) => new HtmlWebpackPlugin({
-    filename: path.resolve(__dirname, `dist/${templateName}`),
-    template: `src/${templateName}`,
-  }));
+const srcDir = fs.readdirSync(path.resolve(__dirname, 'src'));
+const multipleHtmlPlugins = srcDir.filter((file) => file.match(/\.html$/)).map((html) => {
+  return new HtmlWebpackPlugin({
+    filename: path.resolve(__dirname, `dist/${html}`),
+    template: `src/${html}`,
+  });
+});
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
   devtool: 'source-map',
-  entry: path.resolve(__dirname, 'src/js/index.js'),
+  entry: {
+    app: path.resolve(__dirname, 'src/js/index.js'),
+  },
   output: {
-    filename: 'js/bundle.js',
+    filename: 'js/[name].bundle.js',
     path: path.resolve(__dirname, 'dist/'),
-    // clean: true,
   },
   devServer: {
-    contentBase: '../dist',
+    contentBase: path.resolve(__dirname, 'dist/'),
     watchContentBase: true,
+    liveReload: true,
   },
   stats: {
     children: true,
@@ -52,13 +56,12 @@ module.exports = {
         test: /\.(svg|jpeg|jpg|png|webp|gif)(\?[\s\S]+)?$/,
         type: 'asset/resource',
         generator: {
-          filename: 'images/[ext]/[name][ext]',
+          filename: 'images/[name][ext]',
         },
       },
     ],
   },
-  plugins: [
-    ...multipleHtmlPlugins,
+  plugins: [...multipleHtmlPlugins,
     new MiniCssExtractPlugin({
       filename: 'css/bundle.css',
     }),
