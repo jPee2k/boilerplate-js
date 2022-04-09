@@ -21,3 +21,34 @@
   visibility: visible;
   opacity: 1;
 }
+
+@mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white,  50%)) {
+    // For Moz
+  scrollbar-color: $foreground-color $background-color;
+  @if ($size <= 10px) {
+    scrollbar-width: thin;
+  } @else {
+    scrollbar-width: auto;
+  }
+
+  // For Google Chrome
+  &::-webkit-scrollbar {
+    width: $size;
+    height: $size;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $foreground-color;
+    border-radius: calc(#{$size} / 2);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $background-color;
+  }
+
+  // For Internet Explorer
+  & {
+    scrollbar-face-color: $foreground-color;
+    scrollbar-track-color: $background-color;
+  }
+}

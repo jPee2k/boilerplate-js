@@ -1,4 +1,6 @@
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -37,4 +39,8 @@ img {
 
     object-fit: cover;
   }
+}
+
+html {
+  @include scrollbars(10px, cornflowerblue, lightblue);
 }
